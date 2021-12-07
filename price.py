@@ -4,6 +4,7 @@ import shap
 import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestRegressor
+import plotly.express as px
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -17,6 +18,27 @@ st.write('---')
 boston = datasets.load_boston()
 X = pd.DataFrame(boston.data, columns=boston.feature_names)
 Y = pd.DataFrame(boston.target, columns=["MEDV"])
+
+df_boston = pd.DataFrame(boston.data,columns=boston.feature_names)
+df_boston['target'] = pd.Series(boston.target)
+st.write(df_boston)
+
+chart_select = st.sidebar.selectbox(
+    label ="Select the chart type",
+    options=['Scatterplots','Lineplots','Histogram','Boxplot']
+)
+
+numeric_columns = list(df_boston.select_dtypes(['float','int']).columns)
+
+if chart_select == 'Scatterplots':
+    st.sidebar.subheader('Scatterplot Settings')
+    try:
+        x_values = st.sidebar.selectbox('X axis',options=numeric_columns)
+        y_values = st.sidebar.selectbox('Y axis',options=numeric_columns)
+        plot = px.scatter(data_frame=df_boston,x=x_values,y=y_values)
+        st.write(plot)
+    except Exception as e:
+        print(e)
 
 # Sidebar
 # Header of Specify Input Parameters
@@ -54,7 +76,6 @@ def user_input_features():
 
 df = user_input_features()
 
-# Main Panel
 
 # Print specified input parameters
 st.header('Specified Input parameters')
@@ -75,13 +96,13 @@ st.write('---')
 # https://github.com/slundberg/shap
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(X)
+if st.button('Show Feature Importance'):
+    st.header('Feature Importance')
+    plt.title('Feature importance based on SHAP values')
+    shap.summary_plot(shap_values, X)
+    st.pyplot(bbox_inches='tight')
+    st.write('---')
 
-st.header('Feature Importance')
 plt.title('Feature importance based on SHAP values')
-shap.summary_plot(shap_values, X)
-st.pyplot(bbox_inches='tight')
-st.write('---')
-
-plt.title('Feature importance based on SHAP values (Bar)')
 shap.summary_plot(shap_values, X, plot_type="bar")
 st.pyplot(bbox_inches='tight')
