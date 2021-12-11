@@ -13,6 +13,20 @@ st.write("""
 This app predicts the **Boston House Price**!
 """)
 st.write('---')
+st.write('**Description of Dataset**')
+st.write('**CRIM** - per capita crime rate by town')
+st.write('**ZN** - proportion of residential land zoned for lots over 25,000 sq.ft.')
+st.write('**INDUS** - proportion of industry occupied acres per town.')
+st.write('**CHAS** - Presence of River')
+st.write('**NOX** - Nitrogen Oxide Concentration (Pollutant)')
+st.write('**RM** -  average number of rooms per dwelling')
+st.write('**AGE** - proportion of owner-occupied units')
+st.write('**DIS** - distance from office')
+st.write('**RAD** - distance from highway')
+st.write('**TAX** - property tax')
+st.write('**PTRATIO** - student to teacher ratio')
+st.write('**B** - perrcentage of lower status of the population')
+st.write('**LSTAT** - per capita crime rate by town')
 
 # Loads the Boston House Price Dataset
 boston = datasets.load_boston()
@@ -115,7 +129,7 @@ model.fit(X, Y)
 # Apply Model to Make Prediction
 prediction = model.predict(df)
 
-st.header('Prediction of MEDV')
+st.header('Prediction of Median Value of House (MEDV)')
 st.write(prediction)
 st.write('---')
 
