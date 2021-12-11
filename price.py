@@ -23,8 +23,9 @@ df_boston = pd.DataFrame(boston.data,columns=boston.feature_names)
 df_boston['target'] = pd.Series(boston.target)
 st.write(df_boston)
 
+#Visualisation
 chart_select = st.sidebar.selectbox(
-    label ="Select the chart type",
+    label ="Select the type of chart",
     options=['Scatterplots','Lineplots','Histogram','Boxplot']
 )
 
@@ -36,6 +37,32 @@ if chart_select == 'Scatterplots':
         x_values = st.sidebar.selectbox('X axis',options=numeric_columns)
         y_values = st.sidebar.selectbox('Y axis',options=numeric_columns)
         plot = px.scatter(data_frame=df_boston,x=x_values,y=y_values)
+        st.write(plot)
+    except Exception as e:
+        print(e)
+if chart_select == 'Histogram':
+    st.sidebar.subheader('Histogram Settings')
+    try:
+        x_values = st.sidebar.selectbox('X axis',options=numeric_columns)
+        plot = px.histogram(data_frame=df_boston,x=x_values)
+        st.write(plot)
+    except Exception as e:
+        print(e)
+if chart_select == 'Lineplots':
+    st.sidebar.subheader('Lineplots Settings')
+    try:
+        x_values = st.sidebar.selectbox('X axis',options=numeric_columns)
+        y_values = st.sidebar.selectbox('Y axis',options=numeric_columns)
+        plot = px.line(df_boston,x=x_values,y=y_values)
+        st.write(plot)
+    except Exception as e:
+        print(e)
+if chart_select == 'Boxplot':
+    st.sidebar.subheader('Boxplot Settings')
+    try:
+        x_values = st.sidebar.selectbox('X axis',options=numeric_columns)
+        y_values = st.sidebar.selectbox('Y axis',options=numeric_columns)
+        plot = px.box(df_boston,x=x_values,y=y_values)
         st.write(plot)
     except Exception as e:
         print(e)
@@ -102,7 +129,6 @@ if st.button('Show Feature Importance'):
     shap.summary_plot(shap_values, X)
     st.pyplot(bbox_inches='tight')
     st.write('---')
-
-plt.title('Feature importance based on SHAP values')
-shap.summary_plot(shap_values, X, plot_type="bar")
-st.pyplot(bbox_inches='tight')
+    plt.title('Feature importance based on SHAP values')
+    shap.summary_plot(shap_values, X, plot_type="bar")
+    st.pyplot(bbox_inches='tight')
